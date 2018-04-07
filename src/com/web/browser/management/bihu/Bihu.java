@@ -53,8 +53,8 @@ public class Bihu extends ManageBrowser {
 		//点击登录按钮
 		this.driver.findElement(By.tagName("form")).submit();
 		
-		WebElement person = this.driver.getWindowHandle().findElement(By.partialLinkText("我的主页"));
-		System.out.println(person.isEnabled());
+		//WebElement person = this.driver.getWindowHandle().findElement(By.partialLinkText("我的主页"));
+		//System.out.println(person.isEnabled());
 		return true;
 	}
 
