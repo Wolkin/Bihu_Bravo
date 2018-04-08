@@ -9,8 +9,7 @@ public class TaskRun {
 		
 		boolean isSuccess = bihu.login("https://bihu.com/login", "jjwlove@126.com", "jjwang1985");
 		if(isSuccess == true) {
-			bihu.intoFocus();
-			bihu.articleList();
+			bihu.doBravo();
 		}
 	}
 }

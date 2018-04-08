@@ -13,6 +13,8 @@ package com.web.browser.management;
 */
 
 import java.io.File;
+import java.util.Properties;
+
 import org.openqa.selenium.WebDriver;
 import com.web.browser.Browser;
 

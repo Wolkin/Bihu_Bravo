@@ -20,7 +20,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.web.browser.management.ManageBrowser;
 
@@ -31,6 +30,8 @@ public class Bihu extends ManageBrowser {
 	private String loginName = "";
 	//定义登录密码
 	private String passWord = "";
+	//关注人员发的最新文章 5 篇
+	private Article articles[] = new Article[3];
 	//关注进入关注界面状态的句柄
 	private String focusHandle = "";
 	
@@ -83,31 +84,53 @@ public class Bihu extends ManageBrowser {
 		return loadcomplete;
 	}
 
+	public void doBravo() {
+		intoFocus();
+		articleList();
+	}
+	
 	/**
 	 * 进入关注页面状态
 	 * @return
 	 */
-	public boolean intoFocus() {
+	private boolean intoFocus() {
 		this.driver.findElement(By.linkText("关注")).click();
 		this.focusHandle = this.driver.getWindowHandle();
 		this.driver = this.driver.switchTo().window(this.focusHandle);
+		
 		
 		return true;
 	}
 	
 	
-	public Article articleList() {
-		Article article = new Article();
+	public void articleList() {
+		String author = "";
+		String time = "";
+		String title = "";
+		String sum = "";
+		String count = "";
 		
 		//获取第一篇文章
-		WebElement articleList = this.driver.findElements(By.tagName("li")).get(0);
+		for(int i = 0 ; i < 3 ; i ++) {
+			Article article = new Article();
+			WebElement articleList = this.driver.findElements(By.tagName("li")).get(i);
+			
+			author = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[1]/div")).findElements(By.tagName("p")).get(0).getText();
+			time = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[1]/div")).findElements(By.tagName("p")).get(1).getText();
+			title = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[2]/div/div[1]")).getText();
+			sum = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[2]/div/div[3]")).findElements(By.tagName("span")).get(0).getText();
+			count = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[2]/div/div[3]")).findElements(By.tagName("span")).get(1).getText();
+			System.out.println("【作者】：" + author + " | 【标题】：" + title + " | 【时间】：" + time + " | 【金额】：" + sum + " | 【赞数】：" + count);
+			
+			article.setAuthor(author);
+			article.setTime(time);
+			article.setTitle(title);
+			article.setSum(Double.parseDouble(sum));
+			article.setCout(Integer.parseInt(count));
+			
+			articles[i] = article;
+		}
 		
-		String author = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[1]/div")).findElements(By.tagName("p")).get(0).getText();
-		String time = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[1]/div")).findElements(By.tagName("p")).get(1).getText();
-		
-		
-		
-		return article;
 	}
 	
 	/**

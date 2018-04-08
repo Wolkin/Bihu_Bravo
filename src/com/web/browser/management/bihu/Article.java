@@ -17,7 +17,7 @@ public class Article {
 	//文章作者
 	public String author = "";
 	//发文时间
-	public int time = 0;
+	public String time = "";
 	//文章名称
 	public String title = "";
 	//文章获得金额
@@ -45,7 +45,7 @@ public class Article {
 	 * 
 	 * @return
 	 */
-	public int getTime() {
+	public String getTime() {
 		return time;
 	}
 	
@@ -53,7 +53,7 @@ public class Article {
 	 * 
 	 * @param time
 	 */
-	public void setTime(int time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 	
