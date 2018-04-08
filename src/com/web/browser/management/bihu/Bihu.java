@@ -1,5 +1,7 @@
 package com.web.browser.management.bihu;
 
+import java.util.List;
+
 /**
 *
 * Bihu实体模型
@@ -14,12 +16,10 @@ package com.web.browser.management.bihu;
 */
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.web.browser.management.ManageBrowser;
@@ -31,6 +31,9 @@ public class Bihu extends ManageBrowser {
 	private String loginName = "";
 	//定义登录密码
 	private String passWord = "";
+	//关注进入关注界面状态的句柄
+	private String focusHandle = "";
+	
 	
 	/**
 	 * 构造函数，初始化浏览器驱动和浏览器系统参数
@@ -47,8 +50,14 @@ public class Bihu extends ManageBrowser {
 		this.navigation = driver.navigate();
 	}
 	
-	
+	/**
+	 * 登录币户主页
+	 * @param strURL
+	 * @param loginName
+	 * @param passWord
+	 */
 	public boolean login(String strURL, String loginName, String passWord) {
+		boolean loadcomplete = false;
 		//打开对应网站
 		this.navigation.to(strURL);
 		//初始化用户名
@@ -58,16 +67,49 @@ public class Bihu extends ManageBrowser {
 		//点击登录按钮
 		this.driver.findElement(By.tagName("form")).submit();
 		
-		//获取当前窗口句柄
-		String currentWindow = driver.getWindowHandle();
+		try {
+			//等待页面加载完成
+			//WebDriverWait wait = new WebDriverWait(driver, 6000);
+			Thread.sleep(1000);
+			//判断是否进入个人主页
+			loadcomplete = this.driver.findElement(By.xpath("//img[@alt='个人中心']")).isDisplayed();
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}catch(NoSuchElementException e) {
+			e.printStackTrace();
+			loadcomplete = false;
+		}
 		
-		this.driver.findElement(By.xpath("//img[@alg='个人中心']"));
-		//等待页面加载完成
-		//WebDriverWait wait = new WebDriverWait(driver, 70);
-		//wait.until(ExpectedConditions.titleIs("O..."));
-		return true;
+		return loadcomplete;
 	}
 
+	/**
+	 * 进入关注页面状态
+	 * @return
+	 */
+	public boolean intoFocus() {
+		this.driver.findElement(By.linkText("关注")).click();
+		this.focusHandle = this.driver.getWindowHandle();
+		this.driver = this.driver.switchTo().window(this.focusHandle);
+		
+		return true;
+	}
+	
+	
+	public Article articleList() {
+		Article article = new Article();
+		
+		//获取第一篇文章
+		WebElement articleList = this.driver.findElements(By.tagName("li")).get(0);
+		
+		String author = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[1]/div")).findElements(By.tagName("p")).get(0).getText();
+		String time = articleList.findElement(By.xpath("//*[@id='root']/div/div[1]/div/div[2]/div/ul[2]/li[1]/div[1]/div")).findElements(By.tagName("p")).get(1).getText();
+		
+		
+		
+		return article;
+	}
+	
 	/**
 	 * 
 	 * @return

@@ -7,6 +7,10 @@ public class TaskRun {
 	public static void main(String[] args) {
 		Bihu bihu = new Bihu(null, null);
 		
-		bihu.login("https://bihu.com/login", "jjwlove@126.com", "jjwang1985");
+		boolean isSuccess = bihu.login("https://bihu.com/login", "jjwlove@126.com", "jjwang1985");
+		if(isSuccess == true) {
+			bihu.intoFocus();
+			bihu.articleList();
+		}
 	}
 }
