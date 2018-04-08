@@ -14,9 +14,14 @@ package com.web.browser.management.bihu;
 */
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.web.browser.management.ManageBrowser;
 
 public class Bihu extends ManageBrowser {
@@ -53,8 +58,13 @@ public class Bihu extends ManageBrowser {
 		//点击登录按钮
 		this.driver.findElement(By.tagName("form")).submit();
 		
-		//WebElement person = this.driver.getWindowHandle().findElement(By.partialLinkText("我的主页"));
-		//System.out.println(person.isEnabled());
+		//获取当前窗口句柄
+		String currentWindow = driver.getWindowHandle();
+		
+		this.driver.findElement(By.xpath("//img[@alg='个人中心']"));
+		//等待页面加载完成
+		//WebDriverWait wait = new WebDriverWait(driver, 70);
+		//wait.until(ExpectedConditions.titleIs("O..."));
 		return true;
 	}
 
